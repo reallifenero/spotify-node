@@ -1,0 +1,23 @@
+{
+  "name": "spotify-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reallifenero/spotify-node.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Nero - <twitter.com/reallifenro>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reallifenero/spotify-node/issues"
+  },
+  "homepage": "https://github.com/reallifenero/spotify-node#readme",
+  "engines": {
+    "node": "10.13.0"
+  }
+}
