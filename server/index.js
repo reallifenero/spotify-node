@@ -7,10 +7,12 @@ const REDIRECT_URI =
   process.env.REDIRECT_URI || "http://localhost:8888/callback";
 
 const express = require("express");
+const cors = require("cors");
 const querystring = require("querystring");
 const axios = require("axios");
 const app = express();
 
+app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello, world! This is a new spotify app!");
 });
@@ -74,22 +76,23 @@ app.get("/callback", (req, res) => {
   })
     .then((response) => {
       if (response.status === 200) {
-        const { access_token, token_type } = response.data;
+        const { access_token, token_type, refresh_token } = response.data;
 
-        axios
-          .get("https://api.spotify.com/v1/me", {
-            headers: {
-              Authorization: `${token_type} ${access_token}`,
-            },
-          })
-          .then((response) => {
-            res.send(`<pre>${JSON.stringify(response.data, null, 2)}</pre>`);
-          })
-          .catch((err) => {
-            res.send(err);
-          });
+        const queryParams = querystring.stringify({
+          access_token,
+          refresh_token,
+        });
+
+        // Redirect to app
+        // pass along the  tokens in query params
+
+        res.redirect(`http://localhost:3000/?${queryParams}`);
       } else {
-        res.send(response);
+        res.redirect(
+          `/?${querystring.stringify({
+            error: "invalid_token",
+          })}`
+        );
       }
     })
     .catch((err) => {
@@ -98,12 +101,24 @@ app.get("/callback", (req, res) => {
 });
 
 app.get("/refresh_token", (req, res) => {
-  const { refresh_token } = res.data;
+  const { refresh_token } = req.query;
 
-  axios
-    .get(`http://localhost:8888/refresh_token?refresh_token=${refresh_token}`)
+  axios({
+    method: "post",
+    url: "https://accounts.spotify.com/api/token",
+    data: querystring.stringify({
+      grant_type: "refresh_token",
+      refresh_token: refresh_token,
+    }),
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${new Buffer.from(
+        `${CLIENT_ID}:${CLIENT_SECRET}`
+      ).toString("base64")}`,
+    },
+  })
     .then((response) => {
-      res.send(`<pre>${JSON.stringify(response.data, null, 2)}</pre>`);
+      res.send(response.data);
     })
     .catch((err) => {
       res.send(err);
