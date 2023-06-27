@@ -7,11 +7,20 @@
     "type": "git",
     "url": "https://github.com/reallifenero/spotify-node.git"
   },
+  "engines": {
+    "node": "16.14.2"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules"
+  ],
   "scripts": {
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "server": "nodemon server/index.js",
     "client": "cd client && npm start",
-    "postinstall": "cd client && npm install"
+    "postinstall": "cd client && npm install",
+    "build": "NODE_ENV=production cd client/ && npm install && npm run build",
+    "start-server": "node server/index.js"
   },
   "keywords": [],
   "author": "Nero - <twitter.com/reallifenro>",
@@ -20,9 +29,6 @@
     "url": "https://github.com/reallifenero/spotify-node/issues"
   },
   "homepage": "https://github.com/reallifenero/spotify-node#readme",
-  "engines": {
-    "node": "16.14.2"
-  },
   "devDependencies": {
     "axios": "^1.4.0",
     "concurrently": "^8.2.0",

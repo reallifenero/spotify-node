@@ -21,6 +21,11 @@ function App() {
     catchErrors(getProfile);
   }, [profile]);
 
+  const LOGIN_URI =
+    process.env.NODE_ENV === "production"
+      ? "https:spotify-node.herokuapp.com/login"
+      : "http://localhost:8888/login";
+
   return (
     <div className="App">
       <header className="App-header">
@@ -36,7 +41,7 @@ function App() {
             <p></p>
             <a
               className="App-link"
-              href="http://localhost:8888/login"
+              href={`${LOGIN_URI}`}
               rel="noopener noreferrer"
             >
               Login to Spotify

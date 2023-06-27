@@ -1,21 +1,22 @@
 require("dotenv").config();
 
-const port = process.env.PORT || 8888;
+const PORT = process.env.PORT || 8888;
 const CLIENT_ID = process.env.CLIENT_ID || "20100395a89044388a6b832ade30e643";
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI =
-  process.env.REDIRECT_URI || "http://localhost:8888/callback";
+  process.env.REDIRECT_URI || "https://spotify-node.herokuapp.com/callback";
+const FRONTEND_URI = process.env.FRONTEND_URI;
 
 const express = require("express");
 const cors = require("cors");
 const querystring = require("querystring");
 const axios = require("axios");
+const path = require("path");
+
 const app = express();
 
 app.use(cors());
-app.get("/", (req, res) => {
-  res.send("Hello, world! This is a new spotify app!");
-});
+app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 /**
  * Generate a random string containing numn  and letters
@@ -37,6 +38,14 @@ function generateRandomString(length) {
 }
 
 const stateKey = "spotify_auth_sate";
+
+/**
+ * Routes Config
+ */
+
+app.get("/", (req, res) => {
+  res.send("Hello, world! This is a new spotify app!");
+});
 
 app.get("/login", (req, res) => {
   const state = generateRandomString(16);
@@ -86,7 +95,7 @@ app.get("/callback", (req, res) => {
         // Redirect to app
         // pass along the  tokens in query params
 
-        res.redirect(`http://localhost:3000/?${queryParams}`);
+        res.redirect(`${FRONTEND_URI}?${queryParams}`);
       } else {
         res.redirect(
           `/?${querystring.stringify({
@@ -125,6 +134,12 @@ app.get("/refresh_token", (req, res) => {
     });
 });
 
-app.listen(port, (_) => {
-  console.log("listening on port " + port);
+// Returns all remaining routs to the react app to be handled
+// by react router.
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
+app.listen(PORT, (_) => {
+  console.log("listening on port " + PORT);
 });
