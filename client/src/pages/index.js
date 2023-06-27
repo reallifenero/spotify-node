@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
 
-import { accessToken, logout } from "../spotify";
+import { accessToken, logout } from "../spotify/auth";
+import { getCurrentUserProfile } from "../spotify/api";
+import { catchErrors } from "../utils/utils";
+
 import "../styles/App.css";
 
 function App() {
+  const [profile, setProfile] = useState(null);
   const [token, setToken] = useState(null);
 
   useEffect(() => {
     setToken(accessToken);
-  }, []);
+
+    const getProfile = async () => {
+      const { data } = await getCurrentUserProfile();
+      setProfile(data);
+    };
+
+    catchErrors(getProfile);
+  }, [profile]);
 
   return (
     <div className="App">
@@ -33,8 +44,16 @@ function App() {
           </div>
         ) : (
           <>
-            <p>Logged In</p>
-            <span onClick={() => logout()}>Logout</span>
+            {profile && (
+              <section>
+                <h1>{profile.display_name} is Logged in</h1>
+                <p>he has only {profile.followers.total} followers</p>
+                <img src={profile.images[0].url} alt="" />
+              </section>
+            )}
+            <div>
+              <span onClick={() => logout()}>Logout</span>
+            </div>
           </>
         )}
       </header>

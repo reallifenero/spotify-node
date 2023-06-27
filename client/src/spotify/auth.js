@@ -14,6 +14,20 @@ const LOCALSTORAGE_VALUES = {
   timeStamp: window.localStorage.getItem(LOCALSTORAGE_KEYS.timeStamp),
 };
 
+/**
+ * Logout
+ */
+
+export const logout = () => {
+  console.log(window.localStorage);
+
+  for (const item in LOCALSTORAGE_KEYS) {
+    window.localStorage.removeItem(LOCALSTORAGE_KEYS[item]);
+  }
+
+  window.location = window.location.origin;
+};
+
 // Refresh The Token
 
 const refreshToken = async () => {
@@ -78,14 +92,3 @@ const getAccessToken = () => {
 };
 
 export const accessToken = getAccessToken();
-
-/**
- * Logout
- */
-
-export const logout = () => {
-  window.localStorage.removeItem("spotify_token_timestamp");
-  window.localStorage.removeItem("spotify_access_token");
-  window.localStorage.removeItem("spotify_refresh_token");
-  window.location.reload();
-};
