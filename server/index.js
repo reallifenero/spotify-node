@@ -7,16 +7,37 @@ const REDIRECT_URI =
   process.env.REDIRECT_URI || "https://spotify-node.herokuapp.com/callback";
 const FRONTEND_URI = process.env.FRONTEND_URI;
 
-const express = require("express");
 const cors = require("cors");
-const querystring = require("querystring");
-const axios = require("axios");
 const path = require("path");
+const axios = require("axios");
+const express = require("express");
+const querystring = require("querystring");
+const cookieParser = require("cookie-parser");
+const history = require("connect-history-api-fallback");
 
 const app = express();
 
-app.use(cors());
+// Priority serve any static files
+
 app.use(express.static(path.resolve(__dirname, "../client/build")));
+
+app.use(express.static(path.resolve(__dirname, "../client/build")));
+
+app
+  .use(express.static(path.resolve(__dirname, "../client/build")))
+  .use(cors())
+  .use(cookieParser())
+  .use(
+    history({
+      verbose: true,
+      rewrites: [
+        { from: /\/login/, to: "/login" },
+        { from: /\/callback/, to: "/callback" },
+        { from: /\/refresh_token/, to: "/refresh_token" },
+      ],
+    })
+  )
+  .use(express.static(path.resolve(__dirname, "../client/build")));
 
 /**
  * Generate a random string containing numn  and letters
@@ -138,8 +159,9 @@ app.get("/refresh_token", (req, res) => {
 // by react router.
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build/", "index.html"));
+  res.sendFile(path.resolve(__dirname, "./client/public", "index.html"));
 });
+
 app.listen(PORT, (_) => {
   console.log("listening on port " + PORT);
 });
