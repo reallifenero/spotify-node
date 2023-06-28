@@ -5,7 +5,7 @@ const CLIENT_ID = process.env.CLIENT_ID || "20100395a89044388a6b832ade30e643";
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI =
   process.env.REDIRECT_URI ||
-  "https://spotify-node-7b9a937101d3.herokuapp.com/callback";
+  "https://spotify-node-88afa51b6fea.herokuapp.com/callback";
 const FRONTEND_URI = process.env.FRONTEND_URI;
 
 const cors = require("cors");

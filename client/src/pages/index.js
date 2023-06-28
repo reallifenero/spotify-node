@@ -23,7 +23,7 @@ function App() {
 
   const LOGIN_URI =
     process.env.NODE_ENV === "production"
-      ? "https://spotify-node-7b9a937101d3.herokuapp.com/login"
+      ? "https://spotify-node-88afa51b6fea.herokuapp.com/login"
       : "http://localhost:8888/login";
 
   return (
