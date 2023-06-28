@@ -2,11 +2,18 @@
   "name": "spotify-node",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/reallifenero/spotify-node.git"
   },
+  "keywords": [],
+  "license": "ISC",
+  "author": "Nero - <twitter.com/reallifenro>",
+  "bugs": {
+    "url": "https://github.com/reallifenero/spotify-node/issues"
+  },
+  "homepage": "https://github.com/reallifenero/spotify-node#readme",
   "engines": {
     "node": "16.14.2"
   },
@@ -20,15 +27,9 @@
     "client": "cd client && npm start",
     "postinstall": "cd client && npm install && npm run build",
     "build": "NODE_ENV=production cd client/ && npm install && npm run build",
+    "heroku-postbuild": "cd client/ && yarn && yarn install --production && yarn build",
     "start-server": "node server/index.js"
   },
-  "keywords": [],
-  "author": "Nero - <twitter.com/reallifenro>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/reallifenero/spotify-node/issues"
-  },
-  "homepage": "https://github.com/reallifenero/spotify-node#readme",
   "devDependencies": {
     "axios": "^1.4.0",
     "concurrently": "^8.2.0",
