@@ -28,7 +28,7 @@
     "client": "cd client && npm start",
     "postinstall": "cd client && npm install && npm run build --omit=dev",
     "build": "NODE_ENV=production cd client/ && npm install && npm run build",
-    "start-server": "node index.js"
+    "start-server": "node server/index.js"
   },
   "dependencies": {
     "dotenv": "^8.1.0"
